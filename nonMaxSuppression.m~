@@ -33,7 +33,7 @@ for i = 1:height
                 flag = 1;
             elseif i == 1 ||  j == 1
                 flag =  (mag > magnitude(i+1,j+1));
-            elseif i == height || j == width
+            elseif i == height || j ~= width
                 flag =  (mag > magnitude(i-1,j-1));
             else
                 flag = (mag > magnitude(i+1,j+1)) && (mag > magnitude(i-1,j-1));
