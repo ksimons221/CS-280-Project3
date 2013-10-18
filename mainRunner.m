@@ -2,7 +2,7 @@ clear all;
 clc;
 close all;
 
-imagePath = strcat(pwd, '/edges/images/49024.jpg');
+imagePath = strcat(pwd, '/edges/images/addie.png');
 
 I = imread(imagePath);
 
@@ -39,7 +39,7 @@ grayBlurred = rgb2gray(newImage);
 
 [suppressed] = nonMaxSuppression( angle, magnitude);
 
-[ binaryMatrix ] = hysteresis(5, 50, suppressed );  %20,50 decent
+[ binaryMatrix ] = hysteresis(4, 10, suppressed );  %20,50 decent
 
 finalResult =  binaryMatrix.*255;
 
