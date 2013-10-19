@@ -8,7 +8,7 @@ patches = patchesGenerate(im_gray);
 [IDX, textons] = kmeans(patches',k);
 
 histogram = zeros(k,1);
-for i=1:h
+for i=1:length(IDX)
     histogram(IDX(i)) = histogram(IDX(i)) +1;
 end
 

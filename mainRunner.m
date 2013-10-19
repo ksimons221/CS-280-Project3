@@ -2,7 +2,7 @@ clear all;
 clc;
 close all;
 
-imagePath = strcat(pwd, '/edges/images/addie.png');
+imagePath = strcat(pwd, '/edges/images/carleton.png');
 
 I = imread(imagePath);
 
