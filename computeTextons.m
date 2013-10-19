@@ -1,6 +1,5 @@
 function [ textons, histogram ] = computeTextons( filename , k)
 
-
 im_gray = imread(filename);
 
 patches = patchesGenerate(im_gray);

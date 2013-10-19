@@ -1,52 +1,65 @@
 clear all; clc; close all;
 
-subPath = '/textons/texture_train/';
-list = dir(strcat(pwd, subPath));
-list = list(3:length(list)); %get rid of . and ..
+subPathTrain = '/textons/texture_train/';
+subPathTest = '/textons/texture_test/';
 
-s = 2; %size of training data. For full test use s = length(list);
+listTrain = dir(strcat(pwd, subPathTrain));
+listTrain = listTrain(3:length(listTrain)); %get rid of . and ..
+
+listTest = dir(strcat(pwd, subPathTest));
+listTest = listTest(3:length(listTest)); %get rid of . and ..
+
+s = length(listTrain); %size of training data. For full test use s = length(listTrain);
 k =15;
 
 allHistograms = zeros(k, s);
 allTextons = zeros(k, 25, s);
 
-
 for i = 1:s
-    imagePath = strcat(pwd, subPath, list(i).name);
+    imagePath = strcat(pwd, subPathTrain, listTrain(i).name);
     [textons , histogram] = computeTextons(imagePath, k);
     allHistograms(:,i) = histogram;
     allTextons(:,:,i) = textons;
 end
 
-test_name = 'textons/texture_test/12_beach_sand.tiff';
-im = imread(test_name);
+correct = 0;
+for currentTestIndex = 1 : length(listTest)
+    testImageName = listTest(currentTestIndex).name;
 
-patches = patchesGenerate(im);
-numPatches = size(patches, 2);
+    testImagePath = strcat(subPathTest,testImageName);
+    im = imread(testImagePath);
 
-singlePatch = patches(:,1);
+    patches = patchesGenerate(im);
 
-newHistograms = zeros(k, s);
+    [newHistograms ]= histogramGenerate(allTextons, patches);
 
-for i = 1 : numPatches
-    singlePatch = patches(:,i);
-    index = findClosestTexton(allTextons, singlePatch);
-    newHistograms(index(2),index(1)) = newHistograms(index(2),index(1)) + 1;
+    label = -1;
+    currentDistance = Inf;
+
+    for i = 1 : s
+        testHistogram = newHistograms(:,i);
+        trainHistogram = allHistograms(:,i);
+        X = [testHistogram , trainHistogram];
+        distanceApart = pdist(X');
+        if distanceApart < currentDistance
+            label = i;
+            currentDistance = distanceApart;
+        end    
+    end
+
+    classification = listTrain(label).name;
+    actual = testImageName(4: length(testImageName));
+
+    if strcmp(classification,actual) == 1
+        correct = correct + 1;
+        outPut = strcat('Correctly_matches_' , actual);
+        disp(outPut);
+    else
+        outPut = strcat('FAIL_Classified_' , actual, '_as_' , classification);
+        disp(outPut);
+    end
 end
 
-
-label = -1;
-currentDistance = Inf;
-
-for i = 1 : s
-    testHistogram = newHistograms(:,i);
-    trainHistogram = allHistograms(:,i);
-    X = [testHistogram , trainHistogram];
-    distanceApart = pdist(X');
-    if distanceApart < currentDistance
-        label = i;
-        currentDistance = distanceApart;
-    end    
-end
-
-list(label).name
+accuracy = double(100) * double(correct /  length(listTest));
+disp('Final accuracy is:');
+disp(accuracy);
