@@ -1,0 +1,8 @@
+function [ distanceApart ] = calculateNormalizedCrossCorrelaction( x, y )
+%x = left and y right
+
+top = dot(-x,y);
+bottom = sqrt(dot(x,x) * dot(y,y)  sqrt(9)
+
+end
+
