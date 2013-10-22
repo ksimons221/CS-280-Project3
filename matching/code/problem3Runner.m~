@@ -2,7 +2,7 @@ clear all; clc; close all;
 
 subPathImages = '/Users/Kevin/Documents/MATLAB/CS-280-Project3/matching/data/';
 
-subImage = 'cones/';
+subImage = 'tsukuba/';
 
 imagePath = strcat(subPathImages, subImage);
 
@@ -18,7 +18,7 @@ grayLeft = rgb2gray(leftIm);
 grayRight = rgb2gray(rightIm);
 [h , w] = size(grayLeft);
 results = zeros(h , w);
-windowWidth = 7;
+windowWidth = 3;
 padding = (windowWidth - 1) / 2;
 
 grayLeft = createdPaddedIm( padding, grayLeft );
@@ -29,11 +29,12 @@ grayRight = createdPaddedIm( padding, grayRight );
 
     for i = 1+padding:paddedH-padding
         [ vecsAlongScanLine ] = generateVectorsAlongScanLine( grayRight, i, padding, windowWidth );
-        for j = 1+ padding : paddedW - padding
+        t = i -padding;
+        parfor j = 1+ padding : paddedW - padding
             cutOut = grayLeft(i-padding:i+padding, j-padding:j+padding);
             leftVec = reshape(cutOut, windowWidth^2, 1);
             jPrime = findClosestJPrime(leftVec, vecsAlongScanLine, ssd);
-            results(i-padding,j-padding) = abs(jPrime-j);
+            results(i,j-padding) = abs(jPrime-j);
         end
         i
 

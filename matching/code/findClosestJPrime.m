@@ -11,7 +11,7 @@ for j = 1:w
     if ssd == 1
         distanceApart = calculateSumSquaredDistances(leftVec, rightVec);
     else
-        distanceApart = calculateNormalizedCrossCorrelaction( leftVec, rightVec);
+        distanceApart = calculateNormalizedCrossCorrelaction( double(leftVec), double(rightVec));
     end
     
     if minDist > distanceApart
