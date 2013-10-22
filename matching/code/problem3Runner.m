@@ -12,13 +12,13 @@ rightIm = imread(strcat(imagePath, 'right.png'));
 dt = load(strcat(imagePath, 'gt.mat'));
 truthDisparity = dt.gt;
 
-ssd = 1;
+ssd = 0;
 
 grayLeft = rgb2gray(leftIm);
 grayRight = rgb2gray(rightIm);
 [h , w] = size(grayLeft);
 results = zeros(h , w);
-windowWidth = 7;
+windowWidth = 3;
 padding = (windowWidth - 1) / 2;
 
 grayLeft = createdPaddedIm( padding, grayLeft );

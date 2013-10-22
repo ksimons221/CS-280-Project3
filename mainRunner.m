@@ -39,6 +39,7 @@ finalResult = uint8(suppressed.*ratio);
 %[ binaryMatrix ] = hysteresis(10, 70, suppressed );  %20,50 decent
 
 %finalResult =  binaryMatrix.*255;
+keyboard;
 imshow(finalResult);
 
 figure(2);
