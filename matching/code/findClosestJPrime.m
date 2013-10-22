@@ -1,17 +1,13 @@
-function [ jPrime ] = findClosestJPrime(leftVec, i, rightIm, ssd)
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+function [ jPrime ] = findClosestJPrime(leftVec, vecsAlongScanLine, ssd)
 
-[h , w] = size(rightIm);
+[h , w] = size(vecsAlongScanLine);
 
 jPrime = -1;
-
 minDist = Inf;
 
-for j = 2:w-1
+for j = 1:w
 
-    cutOut = rightIm(i-1:i+1, j-1:j+1);
-    rightVec = reshape(cutOut, 9, 1);
+    rightVec = vecsAlongScanLine(:, j);
     if ssd == 1
         distanceApart = calculateSumSquaredDistances(leftVec, rightVec);
     else
@@ -24,4 +20,3 @@ for j = 2:w-1
     end
     
 end
-

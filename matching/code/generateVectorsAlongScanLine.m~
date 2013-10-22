@@ -1,0 +1,19 @@
+function [ results ] = generateVectorsAlongScanLine( im, iLine, padding, windowSize )
+%UNTITLED4 Summary of this function goes here
+%   Detailed explanation goes here
+
+[paddedH , paddedW] = size(im);
+
+results = zeroes(windowSize^2, paddedW - padding - padding);
+
+for i = 1+padding:paddedH-padding
+    
+    
+    cutOut = grayLeft(i-windowOffset:i+windowOffset, j-windowOffset:j+windowOffset);
+        leftVec = reshape(cutOut, windowWidth^2, 1);
+
+end
+
+
+end
+

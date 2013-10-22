@@ -1,11 +1,8 @@
-clear all;
-clc;
-close all;
+clear all; clc; close all;
 
-imagePath = strcat(pwd, '/edges/images/carleton.png');
+imagePath = strcat(pwd, '/edges/images/14092.jpg');
 
 I = imread(imagePath);
-
 
 height = size(I,1);
 width = size(I,2);
@@ -29,27 +26,21 @@ blurBlue = uint8(blurBlue);
 newImage = cat(3,blurRed,blurGreen);
 newImage = cat(3,newImage,blurBlue);
 
-
-diff = I - newImage;
-
 grayBlurred = rgb2gray(newImage);
 
 [dx, dy] = findPartialDerivative(grayBlurred);
 [ angle, magnitude ] = findGradient( dx, dy );
-
 [suppressed] = nonMaxSuppression( angle, magnitude);
 
-[ binaryMatrix ] = hysteresis(4, 10, suppressed );  %20,50 decent
+maxNum = max(max(suppressed));
+ratio = 255/ maxNum; 
+finalResult = uint8(suppressed.*ratio);
 
-finalResult =  binaryMatrix.*255;
+%[ binaryMatrix ] = hysteresis(10, 70, suppressed );  %20,50 decent
 
-
-BW = edge(grayI,'canny');
-
+%finalResult =  binaryMatrix.*255;
 imshow(finalResult);
 
 figure(2);
-
+BW = edge(grayI,'canny');
 imshow(BW);
-
-
