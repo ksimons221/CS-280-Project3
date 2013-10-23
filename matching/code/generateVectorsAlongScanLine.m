@@ -4,7 +4,9 @@ function [ vecsAlongScanLine ] = generateVectorsAlongScanLine( im, iLine, paddin
 
 vecsAlongScanLine = zeros(paddedW - padding - padding, windowWidth^2);
 
-for j = 1+padding:paddedH-padding
+
+
+for j = 1+padding:paddedW-padding
     
     cutOut = im(iLine-padding:iLine+padding, j-padding:j+padding);
     leftVec = reshape(cutOut, 1, windowWidth^2);

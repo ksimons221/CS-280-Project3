@@ -32,14 +32,14 @@ grayBlurred = rgb2gray(newImage);
 [ angle, magnitude ] = findGradient( dx, dy );
 [suppressed] = nonMaxSuppression( angle, magnitude);
 
-maxNum = max(max(suppressed));
-ratio = 255/ maxNum; 
-finalResult = uint8(suppressed.*ratio);
+%maxNum = max(max(suppressed));
+%ratio = 255/ maxNum; 
+%finalResult = uint8(suppressed.*ratio);
 
-%[ binaryMatrix ] = hysteresis(10, 70, suppressed );  %20,50 decent
+[ binaryMatrix ] = hysteresis(10, 70, suppressed );  %20,50 decent
 
-%finalResult =  binaryMatrix.*255;
-keyboard;
+finalResult =  binaryMatrix.*255;
+
 imshow(finalResult);
 
 figure(2);

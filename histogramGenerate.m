@@ -1,19 +1,21 @@
 function [ newHistogram ] = histogramGenerate(centers, allPatches)
 
-[k, space] = size(centers);
+D = pdist2(centers, allPatches);
 
-[h, w] = size(allPatches);
+[c, index] = min(D);
+
+[k, space] = size(centers);
 
 newHistogram = zeros(1, k);
 
-for i = 1 : h
-
-    aPatch = allPatches(i, :);
-
-    index = findClosestTexton(centers, aPatch);
-
-    newHistogram(1,index) = newHistogram(1,index) + 1;
+for j = 1 : length(index)
+    
+    bucket = index(j);
+    
+    newHistogram(bucket) = newHistogram(bucket) + 1;
 
 end
+
+newHistogram = normr(double(newHistogram));
 
 end

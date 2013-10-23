@@ -10,39 +10,55 @@ listTest = dir(strcat(pwd, subPathTest));
 listTest = listTest(3:length(listTest)); %get rid of . and ..
 
 s = length(listTrain); %size of training data. For full test use s = length(listTrain);
-k =25;
+k =50;
 
-allHistograms = zeros(k, s);
-allTextons = zeros(k, 25, s);
+dataLoaded = 0;
 
-allTrainingPatches = [];
-
-for i = 1:s
-    imagePath = strcat(pwd, subPathTrain, listTrain(i).name);
-    patches = patchesGenerate(imagePath);
-    allTrainingPatches = [allTrainingPatches ; patches];
+savePatches = [];
+patchesForKMean = []
+if dataLoaded == 0
+    for i = 1:s
+        imagePath = strcat(pwd, subPathTrain, listTrain(i).name);
+        patches = patchesGenerate(imagePath);
+        patchesForKMean = [patchesForKMean ; patches];
+        savePatches(:,:,i) = patches;
+    end
 end
 
-[IDX, centers] =  kmeans(allTrainingPatches,k);
+
+if dataLoaded == 1
+    patchesForKMean = load(strcat(pwd,'/kmeansPatches.mat'));
+    patchesForKMean = patchesForKMean.allTrainingPatches;
+end
+
+disp('Starting k means');
+
+[IDX, centers] =  kmeans(patchesForKMean,k);
+
+if dataLoaded == 1
+    savePatches = load(strcat(pwd,'/savePatches.mat'));
+    savePatches = savePatches.savePatches;
+end
+
 allHistograms = zeros(s, k);
 
 for i = 1:s
-
     imagePath = strcat(pwd, subPathTrain, listTrain(i).name);
-    allHistograms(i, :)= histogramGenerate(centers, patchesGenerate(imagePath));
+    allHistograms(i, :)= histogramGenerate(centers, savePatches(:,:,i));
 
 end
 
 correct = 0;
+
+disp('Starting classification');
 
 for currentTestIndex = 1 : length(listTest)
 
     testImageName = listTest(currentTestIndex).name;
     testImagePath = strcat(pwd, subPathTest,testImageName);
     
-    singleImageRespone = histogramGenerate(centers, patchesGenerate(imagePath));
-
-    label = findClosetHistogram(allHistograms, singleImageRespone);
+    singleImageRespone = histogramGenerate(centers, patchesGenerate(testImagePath));
+    [label, minVal] = findClosetHistogram(allHistograms, singleImageRespone);
 
     classification = listTrain(label).name;
     actual = testImageName(4: length(testImageName));
@@ -60,3 +76,18 @@ end
 accuracy = double(100) * double(correct /  length(listTest));
 disp('Final accuracy is:');
 disp(accuracy);
+
+
+finalCenters = zeros(5,5,k);
+
+%for j =1:k
+ %   oneCenter = centers(j,:);
+  %  square = reshape(oneCenter, 5, 5)';
+   % noNeg =  square + (-min(min(square)));
+    %ratio = 255 / double(max(max(noNeg)));
+   % scaled = uint8(noNeg * ratio);
+   % subplot(5,10,j);
+   % imshow(scaled)
+   % finalCenters(:,:, j) = scaled;
+%end
+%size each row is a center
