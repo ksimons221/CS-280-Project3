@@ -1,5 +1,6 @@
-function [ patch  ] = patchesGenerate( im  )
+function [ patch  ] = patchesGenerate( imPath  )
 
+im = imread(imPath);
 patch = double(im2col(im, [5,5] , 'sliding'));
 
 [w, h] = size(patch);
@@ -14,6 +15,7 @@ for i = 1: h
    patch(:,i) = single_patch;
 end
 
+patch = patch';
 
 end
 

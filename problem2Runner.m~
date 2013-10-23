@@ -9,21 +9,29 @@ listTrain = listTrain(3:length(listTrain)); %get rid of . and ..
 listTest = dir(strcat(pwd, subPathTest));
 listTest = listTest(3:length(listTest)); %get rid of . and ..
 
-s = length(listTrain); %size of training data. For full test use s = length(listTrain);
-k =25;
+s = 2; %size of training data. For full test use s = length(listTrain);
+k =15;
 
 allHistograms = zeros(k, s);
 allTextons = zeros(k, 25, s);
 
 allTrainingPatches = [];
 
+
 for i = 1:s
     imagePath = strcat(pwd, subPathTrain, listTrain(i).name);
+    
     patches = patchesGenerate(imagePath);
+
     allTrainingPatches = [allTrainingPatches ; patches];
+
 end
 
+keyboard;
+
 [IDX, centers] =  kmeans(allTrainingPatches,k);
+
+
 allHistograms = zeros(s, k);
 
 for i = 1:s
@@ -32,6 +40,8 @@ for i = 1:s
     allHistograms(i, :)= histogramGenerate(centers, patchesGenerate(imagePath));
 
 end
+
+keyboard;
 
 correct = 0;
 
@@ -42,7 +52,7 @@ for currentTestIndex = 1 : length(listTest)
     
     singleImageRespone = histogramGenerate(centers, patchesGenerate(imagePath));
 
-    label = findClosetHistogram(allHistograms, singleImageRespone);
+    label = findClosetHistogram(allHistograms, testHistogram)
 
     classification = listTrain(label).name;
     actual = testImageName(4: length(testImageName));

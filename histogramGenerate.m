@@ -1,18 +1,19 @@
-function [ newHistograms ] = histogramGenerate(allTextons, patches)
+function [ newHistogram ] = histogramGenerate(centers, allPatches)
 
-[k, space, s] = size(allTextons);
+[k, space] = size(centers);
 
-numPatches = size(patches, 2);
+[h, w] = size(allPatches);
 
-newHistograms = zeros(k, s);
+newHistogram = zeros(1, k);
 
-for i = 1 : numPatches
-    singlePatch = patches(:,i);
-    index = findClosestTexton(allTextons, singlePatch);
-    newHistograms(index(2),index(1)) = newHistograms(index(2),index(1)) + 1;
+for i = 1 : h
+
+    aPatch = allPatches(i, :);
+
+    index = findClosestTexton(centers, aPatch);
+
+    newHistogram(1,index) = newHistogram(1,index) + 1;
+
 end
 
-
-
 end
-

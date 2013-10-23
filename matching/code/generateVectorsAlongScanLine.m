@@ -2,13 +2,13 @@ function [ vecsAlongScanLine ] = generateVectorsAlongScanLine( im, iLine, paddin
 
 [paddedH , paddedW] = size(im);
 
-vecsAlongScanLine = zeros(windowWidth^2, paddedW - padding - padding);
+vecsAlongScanLine = zeros(paddedW - padding - padding, windowWidth^2);
 
 for j = 1+padding:paddedH-padding
     
     cutOut = im(iLine-padding:iLine+padding, j-padding:j+padding);
-    leftVec = reshape(cutOut, windowWidth^2, 1);
-    vecsAlongScanLine(:,j-padding) = leftVec;
+    leftVec = reshape(cutOut, 1, windowWidth^2);
+    vecsAlongScanLine(j-padding,:) = leftVec;
 
 end
 

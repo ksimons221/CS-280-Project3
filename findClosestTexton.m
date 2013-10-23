@@ -1,26 +1,23 @@
 function [index] = findClosestTexton(textons, aPatch)
 
-[k, space, d] = size(textons);   %space is alsways 25. d is the number of training images. k is number of textons
+[h, w] = size(textons);   %h = k, w = 25
 
 currentMin = Inf;
-index = [0 , 0];  %is the images, then the texton in that image.
+index = 0;
 
-for i = 1:d
+for i = 1:h
     
-    singleSetOfTextons = textons(:, :, i);
+    singleTexton = textons(i, :);
     
-    for j = 1:k
-        singleCenter = singleSetOfTextons(j,:)';
-        x = [aPatch, singleCenter]';
-        distanceAway = pdist(x);
+    x = [aPatch; singleTexton];
 
-        if distanceAway < currentMin
-            index  = [i , j];
-            currentMin = distanceAway;
-        end
+    distanceAway = pdist(x);
+
+    if distanceAway < currentMin
+       index = i;
+         currentMin = distanceAway;
     end
-    
 end
-
+    
 end
 

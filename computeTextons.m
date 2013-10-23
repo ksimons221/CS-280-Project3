@@ -1,10 +1,6 @@
-function [ textons, histogram ] = computeTextons( filename , k)
+function [ textons, histogram ] = computeTextons( allPatches , k)
 
-im_gray = imread(filename);
-
-patches = patchesGenerate(im_gray);
-
-[IDX, textons] = kmeans(patches',k);
+[IDX, textons] = 
 
 histogram = zeros(k,1);
 for i=1:length(IDX)

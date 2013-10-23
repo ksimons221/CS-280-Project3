@@ -2,6 +2,7 @@ function [ results ] = tempWrapper( X, Y )
 
 %x 1 by n
 %y m by n
+keyboard;
 [h, w] = size(Y);
 
 results = zeros(h,1);
